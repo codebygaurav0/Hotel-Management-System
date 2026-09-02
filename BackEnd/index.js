@@ -21,20 +21,18 @@ const { scheduleNoShowCancellations } = require("./Utilities/cronScheduling");
 mongoose
   .connect(process.env.URL)
   .then(async () => {
-    console.log(" MongoDB Connected");
+    console.log("MongoDB Connected");
 
-    // Old index drop script (if exists)
     try {
       await mongoose.connection.collection("reviews").dropIndex("hotelId_1");
       console.log("Old hotelId_1 index successfully removed from database!");
     } catch (err) {
-      // Index pehle se nahi hoga toh silently catch kar lega
+      // Index does not exist
     }
 
-    // Initialize Cron Job after DB Connection
     scheduleNoShowCancellations();
   })
-  .catch((err) => console.log(" DB Connection Error:", err));
+  .catch((err) => console.log("DB Connection Error:", err));
 
 // Import Routes
 const signupRoute = require("./Route/signupRoute");
@@ -64,7 +62,15 @@ app.use("/temporary", temporaryRoute);
 app.use("/review", reviewRoute);
 app.use("/dashboard", dashboardRoute);
 
+// Health Check
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Hotel Management System Backend is Running",
+  });
+});
+
 // Start Server
 app.listen(port, () => {
-  console.log(` Server is Running on Port ${port}`);
+  console.log(`Server is Running on Port ${port}`);
 });
