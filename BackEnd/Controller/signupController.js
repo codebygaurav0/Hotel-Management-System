@@ -1,4 +1,5 @@
 const SignupModel = require("../Model/signupModel");
+const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../Utilities/NodeMailer");
@@ -66,7 +67,7 @@ const sendSignupOtp = async (req, res) => {
                     font-size:22px;
                     letter-spacing:1px;
                 ">
-                    STAYFINDER
+                    LUXE FINDER
                 </h1>
 
                 <p style="
@@ -247,7 +248,7 @@ const verifySignupOtp = async (req, res) => {
 
                 <div style="background:#1B2537;padding:35px;text-align:center;">
                     <h1 style="color:#ffffff;margin:0;font-size:24px;">
-                        STAYFINDER
+                         LUXE FINDER
                     </h1>
 
                     <p style="color:#A2782E;margin:5px 0;font-size:10px;text-transform:uppercase;letter-spacing:3px;">
@@ -409,6 +410,9 @@ const sendOtp = async (req, res) => {
     try {
         const { email } = req.body;
 
+        console.log("📩 Send OTP Request:", email);
+        console.log("🟢 MongoDB State:", mongoose.connection.readyState);
+
         if (!email?.trim()) {
             return res.status(400).json({
                 success: false,
@@ -417,8 +421,10 @@ const sendOtp = async (req, res) => {
         }
 
         const existingUser = await SignupModel.findOne({
-            email: email.toLowerCase(),
+            email: email.trim().toLowerCase(),
         });
+
+        console.log("👤 User Found:", !!existingUser);
 
         if (!existingUser) {
             return res.status(404).json({
@@ -441,11 +447,7 @@ const sendOtp = async (req, res) => {
 
         const html = `
             <div style="max-width:600px;margin:auto;background:#F7F6F0;padding:40px;border-radius:16px;font-family:Arial,sans-serif;">
-
-                <h1 style="color:#1B2537;">
-                    STAYFINDER
-                </h1>
-
+                <h1 style="color:#1B2537;">STAYFINDER</h1>
                 <h2>Password Reset OTP</h2>
 
                 <p>
@@ -462,16 +464,18 @@ const sendOtp = async (req, res) => {
                         ${otp}
                     </strong>
                 </div>
-
             </div>
         `;
 
-        // ✅ Brevo API
+        console.log("📨 Sending OTP Email...");
+
         await sendEmail({
             to: existingUser.email,
             subject: "🔐 Password Reset OTP",
             html: html,
         });
+
+        console.log("✅ OTP Email Sent");
 
         return res.status(200).json({
             success: true,
@@ -479,11 +483,13 @@ const sendOtp = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Send OTP Error:", error);
+        console.error("🔥 SEND OTP ERROR:", error);
+        console.error("🔥 Message:", error.message);
+        console.error("🔥 Response:", error.response?.data);
 
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: error.response?.data?.message || error.message,
         });
     }
 };

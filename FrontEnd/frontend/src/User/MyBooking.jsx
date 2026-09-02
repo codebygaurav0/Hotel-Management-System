@@ -345,7 +345,7 @@ const MyBookings = () => {
                 <Hotel size={18} />
               </div>
               <span className="font-bold text-lg tracking-tight text-amber-950 font-['Space_Grotesk']">
-                AuraStays
+                 Luxe Stays
               </span>
             </div>
 
