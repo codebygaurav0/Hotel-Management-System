@@ -139,7 +139,7 @@ const Login = () => {
                         <Hotel size={24} strokeWidth={2.5} />
                     </div>
                     <div>
-                        <h2 className="text-2xl font-bold text-white tracking-tight font-['Space_Grotesk',sans-serif]">HotelSuite</h2>
+                        <h2 className="text-2xl font-bold text-white tracking-tight font-['Space_Grotesk',sans-serif]">Luxstay</h2>
                         <p className="text-[10px] tracking-[0.2em] text-amber-400 font-bold uppercase">Management System</p>
                     </div>
                 </div>
@@ -184,7 +184,7 @@ const Login = () => {
                     <div className="w-8 h-8 rounded-lg bg-emerald-950 flex items-center justify-center text-amber-400">
                         <Hotel size={18} />
                     </div>
-                    <span className="text-xl font-bold text-neutral-900 font-['Space_Grotesk',sans-serif]">HotelSuite</span>
+                    <span className="text-xl font-bold text-neutral-900 font-['Space_Grotesk',sans-serif]">Luxstay</span>
                 </div>
 
                 <div className="w-full max-w-md">

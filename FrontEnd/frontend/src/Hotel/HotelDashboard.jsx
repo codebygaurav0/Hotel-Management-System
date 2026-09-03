@@ -106,8 +106,8 @@ const HotelDashboard = () => {
           return;
         }
 
-        const response = await axios.get(
-          `http://localhost:5000/dashboard/summary`,
+     const response = await axios.get(
+  `${signupApi}dashboard/summary`,
           {
             headers: { Authorization: `Bearer ${token}` },
             params: {
