@@ -128,11 +128,11 @@ const HotelLayout = () => {
 
             <div className="overflow-hidden">
               <span className="font-extrabold text-base tracking-tight text-[#2d241e] block truncate">
-                {user?.name || "Luxe Stays"}
+                {user?.name || "Luxstay"}
               </span>
 
               <span className="text-[10px] text-[#8c6d53] font-bold uppercase tracking-widest block font-mono">
-                Luxe Hotel Suite
+                Luxstay Hotel Management
               </span>
             </div>
           </div>

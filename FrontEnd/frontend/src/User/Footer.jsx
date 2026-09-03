@@ -38,7 +38,7 @@ const Footer = () => {
 
               <div>
                 <h2 className="text-xl font-bold text-[#2c1e16] font-['Space_Grotesk'] tracking-tight leading-none">
-                  KHUSHstay
+                  Luxstay
                 </h2>
                 <p className="text-[10px] text-[#8c6239] tracking-[0.15em] font-bold uppercase font-['IBM_Plex_Mono'] mt-1">
                   Luxury Hotel Booking
@@ -112,10 +112,10 @@ const Footer = () => {
               <div className="flex items-center gap-2.5">
                 <Mail className="text-[#8c6239] shrink-0" size={16} />
                 <a
-                  href="mailto:support@khushstay.com"
+                  href="mailto:support@luxstay.com"
                   className="hover:text-[#8c6239] transition"
                 >
-                  support@khushstay.com
+                  support@luxstay.com
                 </a>
               </div>
             </div>
@@ -181,7 +181,7 @@ const Footer = () => {
         <div className="border-t border-[#e8ded1] py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-semibold text-[#8c786c]">
           <p className="text-center md:text-left">
             © {new Date().getFullYear()}{" "}
-            <span className="font-bold text-[#2c1e16]">KHUSHstay</span>. All
+            <span className="font-bold text-[#2c1e16]">Luxstay</span>. All
             Rights Reserved.
           </p>
 

@@ -67,7 +67,7 @@ const sendSignupOtp = async (req, res) => {
                     font-size:22px;
                     letter-spacing:1px;
                 ">
-                    LUXE FINDER
+                    Luxstay
                 </h1>
 
                 <p style="
@@ -150,7 +150,7 @@ const sendSignupOtp = async (req, res) => {
                 font-size:11px;
                 border-top:1px solid #E5E2D5;
             ">
-                © 2026 StayFinder Executive Collection.
+                © 2026 Luxstay.
                 All rights reserved.
             </div>
 
@@ -160,7 +160,7 @@ const sendSignupOtp = async (req, res) => {
         // Send email through Brevo
         await sendEmail({
             to: normalizedEmail,
-            subject: "🔐 Your StayFinder Verification Code",
+            subject: "🔐 Your Luxstay Verification Code",
             html: html,
         });
 
@@ -248,7 +248,7 @@ const verifySignupOtp = async (req, res) => {
 
                 <div style="background:#1B2537;padding:35px;text-align:center;">
                     <h1 style="color:#ffffff;margin:0;font-size:24px;">
-                         LUXE FINDER
+                         Luxstay
                     </h1>
 
                     <p style="color:#A2782E;margin:5px 0;font-size:10px;text-transform:uppercase;letter-spacing:3px;">
@@ -263,7 +263,7 @@ const verifySignupOtp = async (req, res) => {
                     </h2>
 
                     <p style="font-size:14px;color:#555;line-height:1.7;">
-                        Thank you for registering with StayFinder.
+                        Thank you for registering with Luxstay.
                         Your account has been verified successfully.
                     </p>
 
@@ -289,7 +289,7 @@ const verifySignupOtp = async (req, res) => {
 
                     <p style="font-size:13px;color:#888;">
                         Warm Regards,<br>
-                        <strong>The StayFinder Concierge Team</strong>
+                        <strong>The Luxstay Team</strong>
                     </p>
 
                 </div>
@@ -304,7 +304,7 @@ const verifySignupOtp = async (req, res) => {
         // ✅ Brevo API
         await sendEmail({
             to: user.email,
-            subject: "✨ Welcome to StayFinder — Account Verified",
+            subject: "✨ Welcome to Luxstay — Account Verified",
             html: html,
         });
 
@@ -447,7 +447,7 @@ const sendOtp = async (req, res) => {
 
         const html = `
             <div style="max-width:600px;margin:auto;background:#F7F6F0;padding:40px;border-radius:16px;font-family:Arial,sans-serif;">
-                <h1 style="color:#1B2537;">STAYFINDER</h1>
+                <h1 style="color:#1B2537;">Luxstay</h1>
                 <h2>Password Reset OTP</h2>
 
                 <p>

@@ -221,24 +221,23 @@ const PublicHome = () => {
   const fetchHotels = async () => {
     try {
       setLoading(true);
-      const params = new URLSearchParams();
-      if (debouncedSearchQuery) params.append("search", debouncedSearchQuery);
-      if (selectedState) params.append("state", selectedState);
-      if (selectedCity) params.append("city", selectedCity);
-      if (selectedPropertyType)
-        params.append("propertyType", selectedPropertyType);
-      if (selectedAmenities.length > 0)
-        params.append("amenities", selectedAmenities.join(","));
-      if (checkInDate) params.append("checkIn", checkInDate);
-      if (checkOutDate) params.append("checkOut", checkOutDate);
-      params.append("sortBy", sortBy);
-      params.append("order", order);
-      params.append("page", currentPage);
-      params.append("limit", limit);
+      const params = {
+        ...(debouncedSearchQuery && { search: debouncedSearchQuery }),
+        ...(selectedState && { state: selectedState }),
+        ...(selectedCity && { city: selectedCity }),
+        ...(selectedPropertyType && { propertyType: selectedPropertyType }),
+        ...(selectedAmenities.length > 0 && {
+          amenities: selectedAmenities.join(","),
+        }),
+        ...(checkInDate && { checkIn: checkInDate }),
+        ...(checkOutDate && { checkOut: checkOutDate }),
+        sortBy,
+        order,
+        page: currentPage,
+        limit,
+      };
 
-      const res = await axios.get(
-        `${signupApi}hotel/public/all?${params.toString()}`,
-      );
+      const res = await axios.get(`${signupApi}hotel/public/all`, { params });
       setHotels(res.data.hotels || []);
       setTotalPages(res.data.totalPages || 1);
       setTotalHotelsCount(res.data.totalHotels || 0);
@@ -336,7 +335,7 @@ const PublicHome = () => {
                 <Hotel size={18} />
               </div>
               <span className="font-bold text-lg tracking-tight text-neutral-900 font-['Space_Grotesk']">
-                LuxStay
+                Luxstay
               </span>
             </div>
 
@@ -450,7 +449,7 @@ const PublicHome = () => {
             </h1>
             <p className="text-neutral-500 mt-2 text-xs md:text-sm font-medium max-w-lg mx-auto">
               Filter by destination, select your travel dates, and explore
-              verified luxury properties with LuxStay
+              verified luxury properties with Luxstay
             </p>
           </div>
 

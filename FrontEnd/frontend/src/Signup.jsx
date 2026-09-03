@@ -165,7 +165,7 @@ const Signup = () => {
                         {step === 1 ? "Create Account" : "Enter OTP"}
                     </h1>
                     <p className="text-neutral-500 text-xs mt-1 font-medium">
-                        {step === 1 ? "Join AuraStays to book luxury stays" : `We've sent a 6-digit code to ${formData.email}`}
+                        {step === 1 ? "Join Luxstay to book luxury stays" : `We've sent a 6-digit code to ${formData.email}`}
                     </p>
                 </div>
 

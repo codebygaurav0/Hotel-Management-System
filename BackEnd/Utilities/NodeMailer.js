@@ -37,7 +37,7 @@ const sendEmail = async (to, subject, html) => {
             "https://api.brevo.com/v3/smtp/email",
             {
                 sender: {
-                    name: "Hotel Management System",
+                    name: "Luxstay",
                     email: process.env.BREVO_EMAIL,
                 },
 

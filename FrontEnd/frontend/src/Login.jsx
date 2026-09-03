@@ -109,7 +109,7 @@ const Login = () => {
         }
     };
 
-    // Field classes with emerald focus rings to match the LuxStay palette
+    // Field classes with emerald focus rings to match the Luxstay palette
     const fieldClass = (name) =>
         `w-full border pl-11 pr-11 h-12 text-sm font-medium rounded-xl outline-none transition-all bg-neutral-50/50 text-neutral-900 shadow-sm ${errors[name]
             ? "border-rose-300 focus:border-rose-500 bg-rose-50/20"
@@ -172,7 +172,7 @@ const Login = () => {
                 
                 {/* Copyright/Footer note */}
                 <p className="relative z-10 text-emerald-200/50 text-sm">
-                    © {new Date().getFullYear()} HotelSuite Technologies. All rights reserved.
+                    © {new Date().getFullYear()} Luxstay. All rights reserved.
                 </p>
             </div>
 

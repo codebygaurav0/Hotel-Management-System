@@ -117,7 +117,7 @@ const sendAdminSignupOtp = async (req, res) => {
     const html = `
             <div style="max-width:600px;margin:auto;background:#F7F6F0;border:1px solid #E5E2D5;border-radius:16px;overflow:hidden;font-family:'Inter',Arial,sans-serif;color:#1B2537;">
                 <div style="background:#1B2537;padding:35px;text-align:center;">
-                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">STAYFINDER</h1>
+                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">Luxstay</h1>
                     <p style="color:#A2782E;margin:5px 0 0 0;font-size:10px;text-transform:uppercase;letter-spacing:2px;">Security Verification</p>
                 </div>
                 <div style="padding:40px;background:#ffffff;">
@@ -129,12 +129,12 @@ const sendAdminSignupOtp = async (req, res) => {
                     </div>
                 </div>
                 <div style="background:#F7F6F0;padding:20px;text-align:center;color:#8C8676;font-size:11px;border-top:1px solid #E5E2D5;">
-                    &copy; 2026 StayFinder Executive Collection. All rights reserved.
+                    &copy; 2026 Luxstay. All rights reserved.
                 </div>
             </div>
         `;
 
-    await sendEmail(email, "🔐 Email Verification OTP — StayFinder", html);
+    await sendEmail(email, "🔐 Email Verification OTP — Luxstay", html);
     console.log("📧 [SEND_ADMIN_OTP] Verification email sent to:", email);
 
     return res.status(200).json({
@@ -244,7 +244,7 @@ const verifyAndCreateAdmin = async (req, res) => {
     const html = `
             <div style="max-width:600px;margin:auto;background:#F7F6F0;border:1px solid #E5E2D5;border-radius:16px;overflow:hidden;font-family:'Inter',Arial,sans-serif;color:#1B2537;">
                 <div style="background:#1B2537;padding:35px;text-align:center;">
-                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">STAYFINDER</h1>
+                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">Luxstay</h1>
                     <p style="color:#A2782E;margin:5px 0 0 0;font-size:10px;text-transform:uppercase;letter-spacing:2px;">Executive Management</p>
                 </div>
                 <div style="padding:40px;background:#ffffff;">
@@ -257,14 +257,14 @@ const verifyAndCreateAdmin = async (req, res) => {
                     </div>
                 </div>
                 <div style="background:#F7F6F0;padding:20px;text-align:center;color:#8C8676;font-size:11px;border-top:1px solid #E5E2D5;">
-                    &copy; 2026 StayFinder Executive Collection. All rights reserved.
+                    &copy; 2026 Luxstay. All rights reserved.
                 </div>
             </div>
         `;
 
     await sendEmail(
       admin.email,
-      "🛡️ Admin Application Received — StayFinder",
+      "🛡️ Admin Application Received — Luxstay",
       html,
     );
     console.log(
@@ -459,7 +459,7 @@ const approveAdminRequest = async (req, res) => {
     const html = `
             <div style="max-width:600px;margin:auto;background:#F7F6F0;border:1px solid #E5E2D5;border-radius:16px;overflow:hidden;font-family:'Inter',Arial,sans-serif;color:#1B2537;">
                 <div style="background:#1B2537;padding:35px;text-align:center;">
-                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">STAYFINDER</h1>
+                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">Luxstay</h1>
                     <p style="color:#A2782E;margin:5px 0 0 0;font-size:10px;text-transform:uppercase;letter-spacing:2px;">Executive Portal</p>
                 </div>
                 <div style="padding:40px;background:#ffffff;">
@@ -472,14 +472,14 @@ const approveAdminRequest = async (req, res) => {
                     </div>
                 </div>
                 <div style="background:#F7F6F0;padding:20px;text-align:center;color:#8C8676;font-size:11px;border-top:1px solid #E5E2D5;">
-                    &copy; 2026 StayFinder Executive Collection. All rights reserved.
+                    &copy; 2026 Luxstay. All rights reserved.
                 </div>
             </div>
         `;
 
     await sendEmail(
       admin.email,
-      "✨ Admin Account Approved — StayFinder",
+      "✨ Admin Account Approved — Luxstay",
       html,
     );
     console.log("✅ [APPROVE_ADMIN] Admin approved successfully & email sent!");
@@ -529,7 +529,7 @@ const rejectAdminRequest = async (req, res) => {
     const html = `
             <div style="max-width:600px;margin:auto;background:#F7F6F0;border:1px solid #E5E2D5;border-radius:16px;overflow:hidden;font-family:'Inter',Arial,sans-serif;color:#1B2537;">
                 <div style="background:#1B2537;padding:35px;text-align:center;">
-                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">STAYFINDER</h1>
+                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">Luxstay</h1>
                     <p style="color:#A2782E;margin:5px 0 0 0;font-size:10px;text-transform:uppercase;letter-spacing:2px;">Application Update</p>
                 </div>
                 <div style="padding:40px;background:#ffffff;">
@@ -541,14 +541,14 @@ const rejectAdminRequest = async (req, res) => {
                     </div>
                 </div>
                 <div style="background:#F7F6F0;padding:20px;text-align:center;color:#8C8676;font-size:11px;border-top:1px solid #E5E2D5;">
-                    &copy; 2026 StayFinder Executive Collection. All rights reserved.
+                    &copy; 2026 Luxstay. All rights reserved.
                 </div>
             </div>
         `;
 
     await sendEmail(
       admin.email,
-      "⚠️ Admin Request Status Update — StayFinder",
+      "⚠️ Admin Request Status Update — Luxstay",
       html,
     );
     console.log("📧 [REJECT_ADMIN] Rejection email sent to:", admin.email);
@@ -611,7 +611,7 @@ const sendOtp = async (req, res) => {
     const html = `
             <div style="max-width:600px;margin:auto;background:#F7F6F0;border:1px solid #E5E2D5;border-radius:16px;overflow:hidden;font-family:'Inter',Arial,sans-serif;color:#1B2537;">
                 <div style="background:#1B2537;padding:35px;text-align:center;">
-                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">STAYFINDER</h1>
+                    <h1 style="color:#ffffff;margin:0;font-size:22px;letter-spacing:1px;">Luxstay</h1>
                     <p style="color:#A2782E;margin:5px 0 0 0;font-size:10px;text-transform:uppercase;letter-spacing:2px;">Security Verification</p>
                 </div>
                 <div style="padding:40px;background:#ffffff;">
@@ -623,12 +623,12 @@ const sendOtp = async (req, res) => {
                     </div>
                 </div>
                 <div style="background:#F7F6F0;padding:20px;text-align:center;color:#8C8676;font-size:11px;border-top:1px solid #E5E2D5;">
-                    &copy; 2026 StayFinder Executive Collection. All rights reserved.
+                    &copy; 2026 Luxstay. All rights reserved.
                 </div>
             </div>
         `;
 
-    await sendEmail(admin.email, "🔐 Verification OTP — StayFinder", html);
+    await sendEmail(admin.email, "🔐 Verification OTP — Luxstay", html);
     console.log("📧 [SEND_STATUS_OTP] Status OTP email sent to:", admin.email);
 
     res
