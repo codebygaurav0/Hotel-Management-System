@@ -83,6 +83,7 @@ const MyBookings = () => {
 
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [cancelLoading, setCancelLoading] = useState(null);
 
   // Default Tab
@@ -111,7 +112,13 @@ const MyBookings = () => {
   const [localReviews, setLocalReviews] = useState({});
 
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("user") || "null");
+  } catch {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -130,6 +137,7 @@ const MyBookings = () => {
 
   const fetchBookings = async () => {
     try {
+      setError("");
       const token = localStorage.getItem("token");
       const res = await axios.get(`${signupApi}booking/myBookings`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -137,6 +145,8 @@ const MyBookings = () => {
       setBookings(res.data.bookings || []);
     } catch (error) {
       console.error("Fetch bookings error:", error);
+      setBookings([]);
+      setError(error.response?.data?.message || "Unable to load your bookings.");
     } finally {
       setLoading(false);
     }
@@ -321,6 +331,22 @@ const MyBookings = () => {
         <p className="text-amber-900/60 text-[11px] font-['IBM_Plex_Mono',monospace] uppercase tracking-widest font-semibold">
           Loading Itinerary...
         </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[60vh] flex flex-col items-center justify-center px-4 text-center">
+        <h1 className="text-xl font-bold text-neutral-900">Bookings unavailable</h1>
+        <p className="mt-2 max-w-md text-sm text-neutral-600">{error}</p>
+        <button
+          type="button"
+          onClick={fetchBookings}
+          className="mt-5 rounded-xl bg-emerald-700 px-4 py-2.5 text-sm font-bold text-white"
+        >
+          Try again
+        </button>
       </div>
     );
   }

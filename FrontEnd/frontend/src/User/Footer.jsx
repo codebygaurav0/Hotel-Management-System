@@ -153,14 +153,20 @@ const Footer = () => {
                 <FaLinkedinIn size={14} />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 rounded-xl bg-white border border-[#e8ded1] text-[#2c1e16] hover:bg-[#2c1e16] hover:text-[#e8ded1] hover:border-[#2c1e16] transition-all duration-300 flex items-center justify-center shadow-xs"
+                title="Instagram"
               >
                 <FaInstagram size={14} />
               </a>
               <a
-                href="#"
+                href="https://x.com/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-9 h-9 rounded-xl bg-white border border-[#e8ded1] text-[#2c1e16] hover:bg-[#2c1e16] hover:text-[#e8ded1] hover:border-[#2c1e16] transition-all duration-300 flex items-center justify-center shadow-xs"
+                title="X"
               >
                 <FaXTwitter size={14} />
               </a>

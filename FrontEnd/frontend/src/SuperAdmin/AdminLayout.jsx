@@ -14,12 +14,28 @@ import {
   PanelLeftClose,
   PanelLeft,
   Shield,
+  Menu,
+  X,
 } from "lucide-react";
 
 const AdminLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  React.useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setMobileMenuOpen(false);
+    };
+
+    document.addEventListener("keydown", closeOnEscape);
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   const menu = [
     {
@@ -58,10 +74,25 @@ const AdminLayout = () => {
       {/* Custom Fonts */}
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');`}</style>
 
+      <div className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b border-emerald-900 bg-emerald-950 px-4 md:hidden">
+        <span className="font-['Space_Grotesk'] text-sm font-bold text-white">Super Admin</span>
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen((open) => !open)}
+          className="rounded-lg p-2 text-emerald-100 hover:bg-emerald-900"
+          aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={mobileMenuOpen}
+        >
+          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </div>
+
       {/* Sidebar - Deep Emerald Header */}
       <aside
-        className={`bg-emerald-950 text-emerald-100 border-r border-emerald-900 flex flex-col justify-between flex-shrink-0 z-20 transition-all duration-300 ${
-          isSidebarCollapsed ? "w-[80px]" : "w-[280px]"
+        className={`fixed left-0 top-0 z-40 h-screen bg-emerald-950 text-emerald-100 border-r border-emerald-900 flex w-[280px] flex-col justify-between transition-transform duration-300 md:relative md:z-20 md:translate-x-0 md:flex-shrink-0 md:transition-[width] ${
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+        } ${
+          isSidebarCollapsed ? "md:w-[80px]" : "md:w-[280px]"
         }`}
       >
         <div>
@@ -204,8 +235,17 @@ const AdminLayout = () => {
         </div>
       </aside>
 
+      {mobileMenuOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation menu"
+          onClick={() => setMobileMenuOpen(false)}
+          className="fixed inset-0 z-30 bg-neutral-950/40 md:hidden"
+        />
+      )}
+
       {/* Main Content Area */}
-      <main className="flex-1 p-8 md:p-10 overflow-x-hidden flex flex-col">
+      <main className="min-w-0 flex-1 p-4 pt-20 md:p-10 md:pt-10 overflow-x-hidden flex flex-col">
         {/* Header Bar */}
         <header className="flex justify-between items-end mb-8">
           <div>

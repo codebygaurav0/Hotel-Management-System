@@ -175,10 +175,16 @@ const RoomImageSlider = ({
                 e.stopPropagation();
                 scrollToImage(idx);
               }}
-              className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                idx === currentIndex ? "bg-emerald-700 w-4" : "bg-neutral-300 w-1.5"
-              }`}
-            />
+              aria-label={`Show hotel image ${idx + 1}`}
+              className="flex h-8 w-8 items-center justify-center rounded-full transition-all cursor-pointer"
+            >
+              <span
+                aria-hidden="true"
+                className={`block rounded-full transition-all ${
+                  idx === currentIndex ? "h-1.5 w-4 bg-emerald-700" : "h-1.5 w-1.5 bg-neutral-300"
+                }`}
+              />
+            </button>
           ))}
         </div>
       )}
@@ -191,6 +197,7 @@ const PublicHome = () => {
 
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   // Filters, Search, Sort & Pagination States
   const [searchQuery, setSearchQuery] = useState("");
@@ -217,10 +224,25 @@ const PublicHome = () => {
 
   const hotelAmenitiesList = Object.keys(amenityIcons);
 
+  useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setMobileMenuOpen(false);
+    };
+
+    document.addEventListener("keydown", closeOnEscape);
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
   // Fetch Hotels
   const fetchHotels = async () => {
     try {
       setLoading(true);
+      setError("");
       const params = {
         ...(debouncedSearchQuery && { search: debouncedSearchQuery }),
         ...(selectedState && { state: selectedState }),
@@ -242,7 +264,9 @@ const PublicHome = () => {
       setTotalPages(res.data.totalPages || 1);
       setTotalHotelsCount(res.data.totalHotels || 0);
     } catch (err) {
-      console.log(err);
+      console.error("Fetch hotels error:", err);
+      setHotels([]);
+      setError(err.response?.data?.message || "Unable to load hotels right now.");
     } finally {
       setLoading(false);
     }
@@ -283,7 +307,13 @@ const PublicHome = () => {
   };
 
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("user") || "null");
+  } catch {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -326,7 +356,7 @@ const PublicHome = () => {
       <div>
         {/* Navbar */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-white/85 backdrop-blur-xl shadow-sm py-4 border-b border-neutral-200">
-          <div className="max-w-[1600px] mx-auto px-6 sm:px-8 flex items-center justify-between">
+          <div className="mx-auto flex w-full min-w-0 max-w-[1600px] items-center justify-between px-4 sm:px-8">
             <div
               className="flex items-center gap-2.5 cursor-pointer group"
               onClick={() => navigate("/")}
@@ -429,18 +459,94 @@ const PublicHome = () => {
             </div>
 
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl border border-neutral-200 text-neutral-700 bg-white"
+              className="md:hidden shrink-0 p-2 rounded-xl border border-neutral-200 text-neutral-700 bg-white"
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </nav>
 
+        {mobileMenuOpen && (
+          <>
+            <button
+              type="button"
+              aria-label="Close navigation menu"
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 top-[65px] z-[60] bg-neutral-950/30 md:hidden"
+            />
+            <aside className="fixed right-0 top-[65px] z-[70] flex h-[calc(100vh-65px)] w-[min(85vw,320px)] flex-col overflow-y-auto border-l border-neutral-200 bg-white p-4 shadow-2xl md:hidden">
+              <nav aria-label="Mobile navigation" className="flex flex-col gap-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate("/");
+                  }}
+                  className="rounded-xl px-4 py-3 text-left text-sm font-semibold text-neutral-700 hover:bg-neutral-100"
+                >
+                  Home
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    document.getElementById("hotel-list")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="rounded-xl px-4 py-3 text-left text-sm font-semibold text-neutral-700 hover:bg-neutral-100"
+                >
+                  Hotels
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate("/myBookings");
+                  }}
+                  className="rounded-xl px-4 py-3 text-left text-sm font-semibold text-neutral-700 hover:bg-neutral-100"
+                >
+                  My Bookings
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    navigate(token ? "/myBookings" : "/login");
+                  }}
+                  className="rounded-xl px-4 py-3 text-left text-sm font-semibold text-neutral-700 hover:bg-neutral-100"
+                >
+                  Profile
+                </button>
+                <a
+                  href="#site-footer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-xl px-4 py-3 text-sm font-semibold text-neutral-700 hover:bg-neutral-100"
+                >
+                  Contact
+                </a>
+                <div className="my-2 border-t border-neutral-200" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    token ? handleLogout() : navigate("/login");
+                  }}
+                  className="rounded-xl bg-emerald-700 px-4 py-3 text-left text-sm font-bold text-white"
+                >
+                  {token ? "Logout" : "Login"}
+                </button>
+              </nav>
+            </aside>
+          </>
+        )}
+
         {/* Hero Section */}
         <section className="relative pt-36 pb-20 px-6 sm:px-8 bg-gradient-to-b from-neutral-50 via-white to-white text-neutral-900 overflow-hidden border-b border-neutral-200">
           <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-emerald-600/10 blur-[120px] rounded-full pointer-events-none"></div>
-          <div className="relative z-10 max-w-4xl mx-auto text-center mb-10">
+          <div className="relative z-10 mx-auto mb-10 w-full min-w-0 max-w-4xl text-center">
             <span className="text-emerald-700 tracking-[0.15em] text-[10px] font-['IBM_Plex_Mono',monospace] font-bold uppercase block mb-2">
               World-Class Destinations
             </span>
@@ -454,7 +560,7 @@ const PublicHome = () => {
           </div>
 
           {/* Search Bar with Debounced Input */}
-          <div className="relative z-20 max-w-4xl mx-auto bg-white rounded-2xl p-2.5 shadow-xl border border-neutral-200 text-neutral-900">
+          <div className="relative z-20 mx-auto w-full min-w-0 max-w-4xl rounded-2xl border border-neutral-200 bg-white p-2.5 text-neutral-900 shadow-xl">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
               <div className="px-3.5 py-2 border-b md:border-b-0 md:border-r border-neutral-200">
                 <label className="block text-[10px] font-['IBM_Plex_Mono',monospace] text-neutral-400 uppercase font-bold mb-1">
@@ -482,6 +588,8 @@ const PublicHome = () => {
                 <div className="flex items-center gap-2">
                   <Calendar size={15} className="text-emerald-700 shrink-0" />
                   <input
+                    id="check-in-date"
+                    aria-label="Check-in date"
                     type="date"
                     value={checkInDate}
                     onChange={(e) => {
@@ -500,6 +608,8 @@ const PublicHome = () => {
                 <div className="flex items-center gap-2">
                   <Calendar size={15} className="text-emerald-700 shrink-0" />
                   <input
+                    id="check-out-date"
+                    aria-label="Check-out date"
                     type="date"
                     value={checkOutDate}
                     onChange={(e) => {
@@ -525,7 +635,7 @@ const PublicHome = () => {
         </section>
 
         {/* Main Content Area */}
-        <div className="max-w-[1600px] mx-auto px-6 sm:px-8 py-10 flex flex-col lg:flex-row gap-8">
+        <div id="hotel-list" className="max-w-[1600px] mx-auto w-full px-4 sm:px-8 py-10 flex flex-col lg:flex-row gap-8">
           {/* Sidebar Filters */}
           <aside className="lg:w-80 w-full shrink-0">
             <div className="sticky top-24 bg-white rounded-3xl shadow-lg border border-neutral-200 p-6 space-y-5">
@@ -565,6 +675,8 @@ const PublicHome = () => {
                     Property Type
                   </label>
                   <select
+                    id="property-type-filter"
+                    aria-label="Property type"
                     value={selectedPropertyType}
                     onChange={(e) => {
                       setSelectedPropertyType(e.target.value);
@@ -586,6 +698,8 @@ const PublicHome = () => {
                     Filter by State
                   </label>
                   <select
+                    id="state-filter"
+                    aria-label="State"
                     value={selectedState}
                     onChange={(e) => {
                       setSelectedState(e.target.value);
@@ -608,6 +722,8 @@ const PublicHome = () => {
                     Filter by City
                   </label>
                   <select
+                    id="city-filter"
+                    aria-label="City"
                     value={selectedCity}
                     onChange={(e) => {
                       setSelectedCity(e.target.value);
@@ -628,9 +744,9 @@ const PublicHome = () => {
               {/* Amenities Checklist */}
               <div>
                 <div className="flex justify-between items-center mb-2.5">
-                  <h4 className="font-['IBM_Plex_Mono',monospace] text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
+                  <h3 className="font-['IBM_Plex_Mono',monospace] text-[10px] font-bold text-neutral-400 uppercase tracking-wider">
                     Amenities ({hotelAmenitiesList.length})
-                  </h4>
+                  </h3>
                   {selectedAmenities.length > 0 && (
                     <span className="text-[10px] bg-emerald-600/10 text-emerald-700 font-bold px-2 py-0.5 rounded-md border border-emerald-600/30">
                       {selectedAmenities.length} selected
@@ -693,6 +809,7 @@ const PublicHome = () => {
                     Sort By:
                   </span>
                   <select
+                    aria-label="Sort hotels by"
                     value={sortBy}
                     onChange={(e) => {
                       setSortBy(e.target.value);
@@ -711,6 +828,7 @@ const PublicHome = () => {
                     </option>
                   </select>
                   <select
+                    aria-label="Sort direction"
                     value={order}
                     onChange={(e) => {
                       setOrder(e.target.value);
@@ -738,8 +856,20 @@ const PublicHome = () => {
                   Updating stays...
                 </p>
               </div>
+            ) : error ? (
+              <div className="rounded-2xl border border-rose-200 bg-rose-50 p-8 text-center">
+                <h2 className="text-lg font-bold text-rose-900">We could not load hotels</h2>
+                <p className="mt-2 text-sm text-rose-700">{error}</p>
+                <button
+                  type="button"
+                  onClick={fetchHotels}
+                  className="mt-4 rounded-xl bg-rose-700 px-4 py-2.5 text-sm font-bold text-white"
+                >
+                  Try again
+                </button>
+              </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid min-w-0 grid-cols-1 gap-5 md:grid-cols-2">
                 {hotels.length > 0 ? (
                   hotels.map((hotel) => {
                     const hotelAmenities = Array.isArray(hotel.amenities)
@@ -752,7 +882,7 @@ const PublicHome = () => {
                       <div
                         key={hotel._id}
                         onClick={() => navigate(`/hotel-details/${hotel._id}`)}
-                        className="group cursor-pointer overflow-hidden rounded-3xl bg-white border border-neutral-200 shadow-lg hover:shadow-xl hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between"
+                        className="group min-w-0 w-full max-w-full cursor-pointer overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-lg transition-all duration-300 hover:border-neutral-300 hover:shadow-xl"
                       >
                         <div className="relative h-56 overflow-hidden bg-neutral-100">
                           <RoomImageSlider

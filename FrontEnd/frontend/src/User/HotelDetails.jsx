@@ -122,6 +122,9 @@ const HotelDetails = () => {
   const [hotel, setHotel] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [roomsError, setRoomsError] = useState("");
+  const [roomsReload, setRoomsReload] = useState(0);
 
   // Search & Sort States for Backend Integration
   const [roomSearch, setRoomSearch] = useState("");
@@ -168,7 +171,13 @@ const HotelDetails = () => {
   });
 
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  let user = null;
+  try {
+    user = JSON.parse(localStorage.getItem("user") || "null");
+  } catch {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -187,6 +196,7 @@ const HotelDetails = () => {
         setHotel(hotelRes.data.hotel);
       } catch (error) {
         console.error("Error fetching hotel details:", error);
+        setError(error.response?.data?.message || "Unable to load this hotel.");
       } finally {
         setLoading(false);
       }
@@ -199,6 +209,7 @@ const HotelDetails = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
+        setRoomsError("");
         // Backend API par query params bhej rahe hain (Search aur Sort ke liye)
         const roomsRes = await axios.get(
           `${signupApi}room/public/hotel/${id}`,
@@ -212,13 +223,15 @@ const HotelDetails = () => {
         setRooms(roomsRes.data.rooms || []);
       } catch (error) {
         console.error("Error fetching rooms:", error);
+        setRooms([]);
+        setRoomsError(error.response?.data?.message || "Unable to load rooms.");
       }
     };
 
     if (id) {
       fetchRooms();
     }
-  }, [id, debouncedSearch, roomSort]);
+  }, [id, debouncedSearch, roomSort, roomsReload]);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -565,9 +578,7 @@ const HotelDetails = () => {
         <h2 className="text-2xl font-bold font-['Space_Grotesk'] text-stone-800 mb-2">
           Hotel Not Found
         </h2>
-        <p className="text-stone-500 mb-6 text-sm">
-          This hotel is currently unavailable.
-        </p>
+        <p className="text-stone-500 mb-6 text-sm">{error || "This hotel is currently unavailable."}</p>
         <button
           onClick={() => navigate("/")}
           className="bg-amber-900 hover:bg-amber-950 text-amber-50 px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider cursor-pointer shadow-sm transition"
@@ -628,7 +639,7 @@ const HotelDetails = () => {
       <div>
         {/* Navigation */}
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[#FFFDF9]/90 backdrop-blur-md shadow-sm py-4 border-b border-amber-900/10">
-          <div className="max-w-[1600px] mx-auto px-6 sm:px-8 flex items-center justify-between">
+          <div className="mx-auto flex w-full min-w-0 max-w-[1600px] items-center justify-between px-4 sm:px-8">
             <div
               className="flex items-center gap-2.5 cursor-pointer group"
               onClick={() => navigate("/")}
@@ -821,7 +832,7 @@ const HotelDetails = () => {
           </div>
         )}
 
-        <div className="max-w-[1600px] mx-auto px-6 sm:px-8 pt-28 lg:pb-24 pb-16">
+        <div className="mx-auto w-full min-w-0 max-w-[1600px] px-4 pb-16 pt-28 sm:px-8 lg:pb-24">
           {/* Header */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
             <div>
@@ -1032,7 +1043,18 @@ const HotelDetails = () => {
 
                 {/* Room Cards List */}
                 <div className="space-y-4">
-                  {rooms.length === 0 ? (
+                  {roomsError ? (
+                    <div className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-center">
+                      <p className="text-sm font-semibold text-rose-800">{roomsError}</p>
+                      <button
+                        type="button"
+                        onClick={() => setRoomsReload((value) => value + 1)}
+                        className="mt-3 rounded-lg bg-rose-700 px-4 py-2 text-xs font-bold text-white"
+                      >
+                        Try again
+                      </button>
+                    </div>
+                  ) : rooms.length === 0 ? (
                     <div className="text-center py-16 bg-[#FFFDF9] border border-dashed border-amber-900/20 rounded-3xl shadow-xs">
                       <BedDouble
                         size={36}

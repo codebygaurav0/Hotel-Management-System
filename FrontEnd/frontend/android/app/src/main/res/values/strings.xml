@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Luxstay Hotel</string>
+    <string name="title_activity_main">Luxstay Hotel</string>
+    <string name="package_name">com.Luxstay.Hotel</string>
+    <string name="custom_url_scheme">com.Luxstay.Hotel</string>
+</resources>

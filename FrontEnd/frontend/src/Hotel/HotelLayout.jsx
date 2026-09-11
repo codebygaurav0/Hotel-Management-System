@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import {
@@ -20,6 +20,19 @@ const HotelLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setMobileMenuOpen(false);
+    };
+
+    document.addEventListener("keydown", closeOnEscape);
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.removeEventListener("keydown", closeOnEscape);
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   let user = null;
 
@@ -281,7 +294,7 @@ const HotelLayout = () => {
 
       {/* ================= MAIN CONTENT ================= */}
 
-      <main className="flex-1 flex flex-col h-full overflow-hidden relative">
+      <main className="min-w-0 flex-1 flex flex-col h-full overflow-hidden relative">
         {/* Top Header */}
 
         <header className="h-20 bg-white/80 backdrop-blur-md border-b border-[#e8dfd5] flex items-center justify-between px-4 sm:px-8 shrink-0 z-10">
@@ -349,7 +362,7 @@ const HotelLayout = () => {
 
         {/* Dynamic Page Content */}
 
-        <div className="flex-1 overflow-y-auto p-4 sm:p-8 scrollbar-hide bg-[#faf7f2]">
+        <div className="min-w-0 flex-1 overflow-y-auto p-4 sm:p-8 scrollbar-hide bg-[#faf7f2]">
           <div className="max-w-[1600px] mx-auto">
             <Outlet />
           </div>

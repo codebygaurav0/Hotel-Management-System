@@ -288,6 +288,19 @@ function App() {
           }
         />
 
+        <Route
+          path="/reset-password"
+          element={
+            <ProtectedRoute
+              allowedRoles={["user", "admin", "superAdmin", "hotel"]}
+            >
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/dashboard" element={<HomeRedirect />} />
+
         {/* Change 4: Catch-all 404 Route */}
         <Route
           path="*"

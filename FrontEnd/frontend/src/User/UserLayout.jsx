@@ -8,12 +8,12 @@ const UserLayout = () => {
   return (
     <div className="min-h-screen bg-white text-neutral-900 font-['Inter',sans-serif] flex flex-col justify-between selection:bg-emerald-600 selection:text-white">
       {/* Main Dynamic Page Content */}
-      <main className="flex-grow">
+      <main className="min-w-0 flex-grow">
         <Outlet />
       </main>
 
       {/* Luxury Light Modern Footer */}
-      <footer className="bg-white text-neutral-500 pt-16 pb-10 border-t border-neutral-200">
+      <footer id="site-footer" className="bg-white text-neutral-500 pt-16 pb-10 border-t border-neutral-200">
         <div className="max-w-[1600px] mx-auto px-6 sm:px-8 grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-neutral-200">
           {/* Brand Info */}
           <div className="space-y-4">
